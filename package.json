@@ -1,0 +1,30 @@
+{
+  "author": {
+    "name": "Soares Chen",
+    "email": "soares.chen@gmail.com",
+    "url": "http://soareschen.com"
+  },
+  "name": "quiver-file-stream",
+  "desription": "Create Quiver read/write streams from the filesystem",
+  "version": "0.0.1",
+  "homepage": "https://github.com/quiverjs/file-stream",
+  "repository": {
+    "url": "git@github.com:quiverjs/file-stream.git"
+  },
+  "dependencies": {
+    "quiver-node-stream": ">=0.0.1"
+  },
+  "devDependencies": {
+    "mocha": ">=1.8.1",
+    "should": ">=1.2.2"
+  },
+  "bugs": {
+    "url": "https://github.com/quiverjs/file-stream/issues",
+    "email": "quiverjs@soareschen.com"
+  },
+  "licenses": {
+    "type": "MIT",
+    "url": "https://raw.github.com/quiverjs/license/master/LICENSE"
+  },
+  "main": "./lib/file-stream"
+}
