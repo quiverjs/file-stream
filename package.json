@@ -6,7 +6,7 @@
   },
   "name": "quiver-file-stream",
   "desription": "Create Quiver read/write streams from the filesystem",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "homepage": "https://github.com/quiverjs/file-stream",
   "repository": {
     "url": "git@github.com:quiverjs/file-stream.git"
