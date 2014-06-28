@@ -6,18 +6,15 @@
   },
   "name": "quiver-file-stream",
   "desription": "Create Quiver read/write streams from the filesystem",
-  "version": "0.0.3",
+  "version": "1.0.0",
   "homepage": "https://github.com/quiverjs/file-stream",
   "repository": {
     "url": "git@github.com:quiverjs/file-stream.git"
   },
   "dependencies": {
-    "quiver-node-stream": "~0.0.3",
-    "quiver-pipe-stream": "~0.0.2",
-    "quiver-error": "~0.1.0"
+    "quiver-stream-util": "~0.0.1",
   },
   "devDependencies": {
-    "quiver-stream-convert": "~0.0.8",
     "mocha": "~1.17.1",
     "should": "~3.1.2"
   },
