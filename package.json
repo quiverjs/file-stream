@@ -12,11 +12,17 @@
     "url": "git@github.com:quiverjs/file-stream.git"
   },
   "dependencies": {
-    "quiver-stream-util": "~0.0.1",
+    "quiver-error": "^0.1.0",
+    "quiver-promise": "~0.0.2",
+    "quiver-stream-util": "~1.0.0",
+    "traceur": "~0.0.49"
   },
   "devDependencies": {
-    "mocha": "~1.17.1",
-    "should": "~3.1.2"
+    "gulp": "^3.8.1",
+    "gulp-traceur": "^0.7.0",
+    "mocha": "^1.20.1",
+    "chai": "^1.9.1",
+    "chai-as-promised": "^4.1.1"
   },
   "bugs": {
     "url": "https://github.com/quiverjs/file-stream/issues",
