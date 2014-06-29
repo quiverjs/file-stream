@@ -17,12 +17,14 @@ var $__0 = $traceurRuntime.assertObject(require('fs')),
     readFileSync = $__0.readFileSync;
 var $__0 = $traceurRuntime.assertObject(require('quiver-promise')),
     promisify = $__0.promisify,
-    resolve = $__0.resolve;
+    resolve = $__0.resolve,
+    enableDebug = $__0.enableDebug;
 var chai = require('chai');
 var chaiAsPromised = require('chai-as-promised');
 chai.use(chaiAsPromised);
 var should = chai.should();
 readFile = promisify(readFile);
+enableDebug();
 var testFilePath = 'test/test-file.txt';
 var testWritePath = 'test/test-write.txt';
 var testTempPath = 'test/test-temp.txt';
@@ -54,8 +56,8 @@ describe('file stream test', (function() {
       should.exist(streamable.toStream);
       should.exist(streamable.toByteRangeStream);
       should.exist(streamable.toFilePath);
+      streamable.toFilePath().should.eventually.equal(testFilePath);
       should.equal(streamable.reusable, true);
-      should.equal(streamable.toFilePath(), testFilePath);
       should.equal(streamable.contentLength, expectedContent.length);
     }));
   }));
@@ -63,7 +65,7 @@ describe('file stream test', (function() {
     var getTempPath = (function() {
       return resolve(testTempPath);
     });
-    fileReadStream(testFilePath).then((function(readStream) {
+    return fileReadStream(testFilePath).then((function(readStream) {
       var streamable = {toStream: (function() {
           return resolve(readStream);
         })};
@@ -73,8 +75,9 @@ describe('file stream test', (function() {
         should.exist(streamable.toFilePath);
         should.equal(streamable.reusable, false);
         should.equal(streamable.tempFile, true);
-        should.equal(streamable.toFilePath(), testTempPath);
         should.equal(streamable.contentLength, expectedContent.length);
+        streamable.toFilePath().should.eventually.equal(testTempPath);
+        readFileSync(testTempPath).toString().should.equal(expectedContent);
       }));
     }));
   }));

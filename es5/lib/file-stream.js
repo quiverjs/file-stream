@@ -39,6 +39,7 @@ var error = $traceurRuntime.assertObject(require('quiver-error')).error;
 var $__0 = $traceurRuntime.assertObject(require('quiver-promise')),
     promisify = $__0.promisify,
     resolve = $__0.resolve;
+var fs = require('fs');
 var statFile = promisify(statFileAsync);
 var getFileStats = (function(filePath, fileStats) {
   return (fileStats ? resolve(fileStats) : statFile(filePath)).then((function(fileStats) {
@@ -52,10 +53,8 @@ var fileReadStream = (function(filePath, fileStats) {
     return nodeToQuiverReadStream(nodeFileReadStream(filePath));
   }));
 });
-var fileWriteStream = (function(filePath, fileStats) {
-  return getFileStats(filePath, fileStats).then((function() {
-    return nodeToQuiverWriteStream(nodeFileWriteStream(filePath));
-  }));
+var fileWriteStream = (function(filePath) {
+  return resolve(nodeToQuiverWriteStream(nodeFileWriteStream(filePath)));
 });
 var tempFileReadStream = (function(filePath, fileStats) {
   return getFileStats(filePath, fileStats).then((function() {
@@ -73,13 +72,13 @@ var tempFileReadStream = (function(filePath, fileStats) {
   }));
 });
 var streamToFile = (function(readStream, filePath) {
-  return createFileWriteStream(filePath).then((function(writeStream) {
+  return fileWriteStream(filePath).then((function(writeStream) {
     return pipeStream(readStream, writeStream);
   }));
 });
-var byteRangeFileStream = (function(filePath, fileStats) {
+var byteRangeFileStream = (function(filePath) {
   var $__1;
-  var options = arguments[2] !== (void 0) ? arguments[2] : {};
+  var options = arguments[1] !== (void 0) ? arguments[1] : {};
   var $__0 = $traceurRuntime.assertObject(options),
       fileStats = $__0.fileStats,
       start = ($__1 = $__0.start) === void 0 ? 0 : $__1,

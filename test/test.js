@@ -14,7 +14,7 @@ import {
   readFile, readFileSync
 } from 'fs'
 
-import { promisify, resolve } from 'quiver-promise'
+import { promisify, resolve, enableDebug } from 'quiver-promise'
 
 var chai = require('chai')
 var chaiAsPromised = require('chai-as-promised')
@@ -23,6 +23,7 @@ chai.use(chaiAsPromised)
 var should = chai.should()
 
 readFile = promisify(readFile)
+enableDebug()
 
 var testFilePath = 'test/test-file.txt'
 var testWritePath ='test/test-write.txt'
@@ -61,15 +62,16 @@ describe('file stream test', () => {
       should.exist(streamable.toByteRangeStream)
       should.exist(streamable.toFilePath)
 
+      streamable.toFilePath().should.eventually.equal(testFilePath)
+
       should.equal(streamable.reusable, true)
-      should.equal(streamable.toFilePath(), testFilePath)
       should.equal(streamable.contentLength, expectedContent.length)
     }))
 
   it('temp file streamable test', () => {
     var getTempPath = () => resolve(testTempPath)
 
-    fileReadStream(testFilePath).then(readStream => {
+    return fileReadStream(testFilePath).then(readStream => {
       var streamable = {
         toStream: () => resolve(readStream)
       }
@@ -82,8 +84,11 @@ describe('file stream test', () => {
 
         should.equal(streamable.reusable, false)
         should.equal(streamable.tempFile, true)
-        should.equal(streamable.toFilePath(), testTempPath)
         should.equal(streamable.contentLength, expectedContent.length)
+
+        streamable.toFilePath().should.eventually.equal(testTempPath)
+
+        readFileSync(testTempPath).toString().should.equal(expectedContent)
       })
     })
   })
