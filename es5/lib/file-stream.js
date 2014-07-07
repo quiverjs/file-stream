@@ -41,9 +41,19 @@ var $__0 = $traceurRuntime.assertObject(require('quiver-promise')),
     resolve = $__0.resolve;
 var fs = require('fs');
 var statFile = promisify(statFileAsync);
+var isFile = (function(fileStats) {
+  if (typeof(fileStats.isFile) == 'function')
+    return fileStats.isFile();
+  return fileStats.isFile;
+});
+var isDirectory = (function(fileStats) {
+  if (typeof(fileStats.isDirectory) == 'function')
+    return fileStats.isDirectory();
+  return fileStats.isDirectory;
+});
 var getFileStats = (function(filePath, fileStats) {
   return (fileStats ? resolve(fileStats) : statFile(filePath)).then((function(fileStats) {
-    if (!fileStats.isFile())
+    if (!isFile(fileStats))
       return reject(error(404, 'file path is not a regular file'));
     return fileStats;
   }));
@@ -119,7 +129,7 @@ var fileStreamable = (function(filePath, fileStats) {
 });
 var tempFileStreamable = (function(filePath, fileStats) {
   return getFileStats(filePath, fileStats).then((function(fileStats) {
-    if (fileStats.isDirectory())
+    if (isDirectory(fileStats))
       return reject(error(404, 'path is directory'));
     var opened = false;
     var wrap = (function(fn) {
