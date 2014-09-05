@@ -1,6 +1,11 @@
 "use strict";
-require('traceur');
-var $__0 = $traceurRuntime.assertObject(require('../lib/file-stream.js')),
+var $__traceur_64_0_46_0_46_58__,
+    $___46__46__47_lib_47_file_45_stream_46_js__,
+    $__quiver_45_stream_45_util__,
+    $__fs__,
+    $__quiver_45_promise__;
+($__traceur_64_0_46_0_46_58__ = require("traceur"), $__traceur_64_0_46_0_46_58__ && $__traceur_64_0_46_0_46_58__.__esModule && $__traceur_64_0_46_0_46_58__ || {default: $__traceur_64_0_46_0_46_58__});
+var $__0 = ($___46__46__47_lib_47_file_45_stream_46_js__ = require("../lib/file-stream.js"), $___46__46__47_lib_47_file_45_stream_46_js__ && $___46__46__47_lib_47_file_45_stream_46_js__.__esModule && $___46__46__47_lib_47_file_45_stream_46_js__ || {default: $___46__46__47_lib_47_file_45_stream_46_js__}),
     fileReadStream = $__0.fileReadStream,
     fileWriteStream = $__0.fileWriteStream,
     tempFileReadStream = $__0.tempFileReadStream,
@@ -9,16 +14,17 @@ var $__0 = $traceurRuntime.assertObject(require('../lib/file-stream.js')),
     fileStreamable = $__0.fileStreamable,
     tempFileStreamable = $__0.tempFileStreamable,
     toFileStreamable = $__0.toFileStreamable;
-var $__0 = $traceurRuntime.assertObject(require('quiver-stream-util')),
-    streamToText = $__0.streamToText,
-    pipeStream = $__0.pipeStream;
-var $__0 = $traceurRuntime.assertObject(require('fs')),
-    readFile = $__0.readFile,
-    readFileSync = $__0.readFileSync;
-var $__0 = $traceurRuntime.assertObject(require('quiver-promise')),
-    promisify = $__0.promisify,
-    resolve = $__0.resolve,
-    enableDebug = $__0.enableDebug;
+var $__1 = ($__quiver_45_stream_45_util__ = require("quiver-stream-util"), $__quiver_45_stream_45_util__ && $__quiver_45_stream_45_util__.__esModule && $__quiver_45_stream_45_util__ || {default: $__quiver_45_stream_45_util__}),
+    streamToText = $__1.streamToText,
+    pipeStream = $__1.pipeStream;
+var fs = ($__fs__ = require("fs"), $__fs__ && $__fs__.__esModule && $__fs__ || {default: $__fs__}).default;
+var $__4 = fs,
+    readFile = $__4.readFile,
+    readFileSync = $__4.readFileSync;
+var $__3 = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}),
+    promisify = $__3.promisify,
+    resolve = $__3.resolve,
+    enableDebug = $__3.enableDebug;
 var chai = require('chai');
 var chaiAsPromised = require('chai-as-promised');
 chai.use(chaiAsPromised);
@@ -34,9 +40,10 @@ describe('file stream test', (function() {
     return fileReadStream(testFilePath).then(streamToText).should.eventually.equal(expectedContent);
   }));
   it('file write stream test', (function() {
-    return Promise.all([fileReadStream(testFilePath), fileWriteStream(testWritePath)]).then((function($__0) {
-      var readStream = $__0[0],
-          writeStream = $__0[1];
+    return Promise.all([fileReadStream(testFilePath), fileWriteStream(testWritePath)]).then((function($__4) {
+      var $__5 = $__4,
+          readStream = $__5[0],
+          writeStream = $__5[1];
       return pipeStream(readStream, writeStream).then((function() {
         readFileSync(testWritePath).toString().should.equal(expectedContent);
       }));

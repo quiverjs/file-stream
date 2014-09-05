@@ -26,19 +26,24 @@ Object.defineProperties(exports, {
     }},
   __esModule: {value: true}
 });
-var $__0 = $traceurRuntime.assertObject(require('fs')),
-    nodeFileReadStream = $__0.createReadStream,
-    nodeFileWriteStream = $__0.createWriteStream,
-    statFileAsync = $__0.stat,
-    unlinkFile = $__0.unlink;
-var $__0 = $traceurRuntime.assertObject(require('quiver-stream-util')),
-    nodeToQuiverReadStream = $__0.nodeToQuiverReadStream,
-    nodeToQuiverWriteStream = $__0.nodeToQuiverWriteStream,
-    pipeStream = $__0.pipeStream;
-var error = $traceurRuntime.assertObject(require('quiver-error')).error;
-var $__0 = $traceurRuntime.assertObject(require('quiver-promise')),
-    promisify = $__0.promisify,
-    resolve = $__0.resolve;
+var $__fs__,
+    $__quiver_45_stream_45_util__,
+    $__quiver_45_error__,
+    $__quiver_45_promise__;
+var fs = ($__fs__ = require("fs"), $__fs__ && $__fs__.__esModule && $__fs__ || {default: $__fs__}).default;
+var $__4 = fs,
+    nodeFileReadStream = $__4.createReadStream,
+    nodeFileWriteStream = $__4.createWriteStream,
+    statFileAsync = $__4.stat,
+    unlinkFile = $__4.unlink;
+var $__1 = ($__quiver_45_stream_45_util__ = require("quiver-stream-util"), $__quiver_45_stream_45_util__ && $__quiver_45_stream_45_util__.__esModule && $__quiver_45_stream_45_util__ || {default: $__quiver_45_stream_45_util__}),
+    nodeToQuiverReadStream = $__1.nodeToQuiverReadStream,
+    nodeToQuiverWriteStream = $__1.nodeToQuiverWriteStream,
+    pipeStream = $__1.pipeStream;
+var error = ($__quiver_45_error__ = require("quiver-error"), $__quiver_45_error__ && $__quiver_45_error__.__esModule && $__quiver_45_error__ || {default: $__quiver_45_error__}).error;
+var $__3 = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}),
+    promisify = $__3.promisify,
+    resolve = $__3.resolve;
 var fs = require('fs');
 var statFile = promisify(statFileAsync);
 var isFile = (function(fileStats) {
@@ -87,12 +92,13 @@ var streamToFile = (function(readStream, filePath) {
   }));
 });
 var byteRangeFileStream = (function(filePath) {
-  var $__1;
+  var $__5,
+      $__6;
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
-  var $__0 = $traceurRuntime.assertObject(options),
-      fileStats = $__0.fileStats,
-      start = ($__1 = $__0.start) === void 0 ? 0 : $__1,
-      end = ($__1 = $__0.end) === void 0 ? -1 : $__1;
+  var $__4 = options,
+      fileStats = $__4.fileStats,
+      start = ($__5 = $__4.start) === void 0 ? 0 : $__5,
+      end = ($__6 = $__4.end) === void 0 ? -1 : $__6;
   return getFileStats(filePath, fileStats).then((function(fileStats) {
     var fileSize = fileStats.size;
     if (end == -1)
@@ -162,11 +168,12 @@ var tempFileStreamable = (function(filePath, fileStats) {
   }));
 });
 var toFileStreamable = (function(streamable, getTempPath) {
-  if (streamable.filePath)
+  if (streamable.toFilePath)
     return resolve(streamable);
-  return Promise.all([streamable.toStream(), getTempPath()]).then((function($__0) {
-    var readStream = $__0[0],
-        tempPath = $__0[1];
+  return Promise.all([streamable.toStream(), getTempPath()]).then((function($__5) {
+    var $__6 = $__5,
+        readStream = $__6[0],
+        tempPath = $__6[1];
     return streamToFile(readStream, tempPath).then((function() {
       return tempFileStreamable(tempPath);
     }));

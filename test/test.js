@@ -10,9 +10,11 @@ import {
   streamToText, pipeStream
 } from 'quiver-stream-util'
 
-import {
+import fs from 'fs'
+
+var {
   readFile, readFileSync
-} from 'fs'
+} = fs
 
 import { promisify, resolve, enableDebug } from 'quiver-promise'
 
