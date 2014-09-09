@@ -21,6 +21,9 @@ Object.defineProperties(exports, {
   tempFileStreamable: {get: function() {
       return tempFileStreamable;
     }},
+  streamableToFile: {get: function() {
+      return streamableToFile;
+    }},
   toFileStreamable: {get: function() {
       return toFileStreamable;
     }},
@@ -42,6 +45,7 @@ var $__1 = ($__quiver_45_stream_45_util__ = require("quiver-stream-util"), $__qu
     pipeStream = $__1.pipeStream;
 var error = ($__quiver_45_error__ = require("quiver-error"), $__quiver_45_error__ && $__quiver_45_error__.__esModule && $__quiver_45_error__ || {default: $__quiver_45_error__}).error;
 var $__3 = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}),
+    async = $__3.async,
     promisify = $__3.promisify,
     resolve = $__3.resolve;
 var fs = require('fs');
@@ -167,15 +171,87 @@ var tempFileStreamable = (function(filePath, fileStats) {
     };
   }));
 });
+var streamableToFile = async($traceurRuntime.initGeneratorFunction(function $__7(streamable, getTempPath) {
+  var filePath,
+      isTemp,
+      $__5,
+      readStream,
+      tempPath,
+      $__8,
+      $__9,
+      $__10,
+      $__11,
+      $__12,
+      $__13,
+      $__14,
+      $__15,
+      $__16;
+  return $traceurRuntime.createGeneratorInstance(function($ctx) {
+    while (true)
+      switch ($ctx.state) {
+        case 0:
+          $ctx.state = (streamable.toFilePath) ? 1 : 6;
+          break;
+        case 1:
+          $ctx.state = 2;
+          return streamable.toFilePath();
+        case 2:
+          filePath = $ctx.sent;
+          $ctx.state = 4;
+          break;
+        case 4:
+          isTemp = streamable.tempFile || false;
+          $ctx.state = 8;
+          break;
+        case 8:
+          $ctx.returnValue = [filePath, isTemp];
+          $ctx.state = -2;
+          break;
+        case 6:
+          $__8 = Promise.all;
+          $__9 = streamable.toStream;
+          $__10 = $__9.call(streamable);
+          $__11 = getTempPath();
+          $__12 = [$__10, $__11];
+          $__13 = $__8.call(Promise, $__12);
+          $ctx.state = 15;
+          break;
+        case 15:
+          $ctx.state = 11;
+          return $__13;
+        case 11:
+          $__14 = $ctx.sent;
+          $ctx.state = 13;
+          break;
+        case 13:
+          $__5 = $__14;
+          $__15 = $__5[0];
+          readStream = $__15;
+          $__16 = $__5[1];
+          tempPath = $__16;
+          $ctx.state = 17;
+          break;
+        case 17:
+          $ctx.state = 19;
+          return streamToFile(readStream, tempPath);
+        case 19:
+          $ctx.maybeThrow();
+          $ctx.state = 21;
+          break;
+        case 21:
+          $ctx.returnValue = [tempPath, true];
+          $ctx.state = -2;
+          break;
+        default:
+          return $ctx.end();
+      }
+  }, $__7, this);
+}));
 var toFileStreamable = (function(streamable, getTempPath) {
   if (streamable.toFilePath)
     return resolve(streamable);
-  return Promise.all([streamable.toStream(), getTempPath()]).then((function($__5) {
-    var $__6 = $__5,
-        readStream = $__6[0],
-        tempPath = $__6[1];
-    return streamToFile(readStream, tempPath).then((function() {
-      return tempFileStreamable(tempPath);
-    }));
+  return streamableToFile(streamable, getTempPath).then((function($__5) {
+    var filePath = $__5[0];
+    return tempFileStreamable(filePath);
   }));
 });
