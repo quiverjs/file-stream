@@ -48,7 +48,6 @@ var $__3 = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_pro
     async = $__3.async,
     promisify = $__3.promisify,
     resolve = $__3.resolve;
-var fs = require('fs');
 var statFile = promisify(statFileAsync);
 var isFile = (function(fileStats) {
   if (typeof(fileStats.isFile) == 'function')
@@ -96,13 +95,13 @@ var streamToFile = (function(readStream, filePath) {
   }));
 });
 var byteRangeFileStream = (function(filePath) {
-  var $__5,
-      $__6;
+  var $__6,
+      $__7;
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
-  var $__4 = options,
-      fileStats = $__4.fileStats,
-      start = ($__5 = $__4.start) === void 0 ? 0 : $__5,
-      end = ($__6 = $__4.end) === void 0 ? -1 : $__6;
+  var $__5 = options,
+      fileStats = $__5.fileStats,
+      start = ($__6 = $__5.start) === void 0 ? 0 : $__6,
+      end = ($__7 = $__5.end) === void 0 ? -1 : $__7;
   return getFileStats(filePath, fileStats).then((function(fileStats) {
     var fileSize = fileStats.size;
     if (end == -1)
@@ -171,13 +170,12 @@ var tempFileStreamable = (function(filePath, fileStats) {
     };
   }));
 });
-var streamableToFile = async($traceurRuntime.initGeneratorFunction(function $__7(streamable, getTempPath) {
+var streamableToFile = async($traceurRuntime.initGeneratorFunction(function $__8(streamable, getTempPath) {
   var filePath,
       isTemp,
       $__5,
       readStream,
       tempPath,
-      $__8,
       $__9,
       $__10,
       $__11,
@@ -185,7 +183,8 @@ var streamableToFile = async($traceurRuntime.initGeneratorFunction(function $__7
       $__13,
       $__14,
       $__15,
-      $__16;
+      $__16,
+      $__17;
   return $traceurRuntime.createGeneratorInstance(function($ctx) {
     while (true)
       switch ($ctx.state) {
@@ -208,27 +207,27 @@ var streamableToFile = async($traceurRuntime.initGeneratorFunction(function $__7
           $ctx.state = -2;
           break;
         case 6:
-          $__8 = Promise.all;
-          $__9 = streamable.toStream;
-          $__10 = $__9.call(streamable);
-          $__11 = getTempPath();
-          $__12 = [$__10, $__11];
-          $__13 = $__8.call(Promise, $__12);
+          $__9 = Promise.all;
+          $__10 = streamable.toStream;
+          $__11 = $__10.call(streamable);
+          $__12 = getTempPath();
+          $__13 = [$__11, $__12];
+          $__14 = $__9.call(Promise, $__13);
           $ctx.state = 15;
           break;
         case 15:
           $ctx.state = 11;
-          return $__13;
+          return $__14;
         case 11:
-          $__14 = $ctx.sent;
+          $__15 = $ctx.sent;
           $ctx.state = 13;
           break;
         case 13:
-          $__5 = $__14;
-          $__15 = $__5[0];
-          readStream = $__15;
-          $__16 = $__5[1];
-          tempPath = $__16;
+          $__5 = $__15;
+          $__16 = $__5[0];
+          readStream = $__16;
+          $__17 = $__5[1];
+          tempPath = $__17;
           $ctx.state = 17;
           break;
         case 17:
@@ -245,7 +244,7 @@ var streamableToFile = async($traceurRuntime.initGeneratorFunction(function $__7
         default:
           return $ctx.end();
       }
-  }, $__7, this);
+  }, $__8, this);
 }));
 var toFileStreamable = (function(streamable, getTempPath) {
   if (streamable.toFilePath)

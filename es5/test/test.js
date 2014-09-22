@@ -1,10 +1,10 @@
 "use strict";
-var $__traceur_64_0_46_0_46_58__,
+var $__traceur_64_0_46_0_46_6__,
     $___46__46__47_lib_47_file_45_stream_46_js__,
     $__quiver_45_stream_45_util__,
     $__fs__,
     $__quiver_45_promise__;
-($__traceur_64_0_46_0_46_58__ = require("traceur"), $__traceur_64_0_46_0_46_58__ && $__traceur_64_0_46_0_46_58__.__esModule && $__traceur_64_0_46_0_46_58__ || {default: $__traceur_64_0_46_0_46_58__});
+($__traceur_64_0_46_0_46_6__ = require("traceur"), $__traceur_64_0_46_0_46_6__ && $__traceur_64_0_46_0_46_6__.__esModule && $__traceur_64_0_46_0_46_6__ || {default: $__traceur_64_0_46_0_46_6__});
 var $__0 = ($___46__46__47_lib_47_file_45_stream_46_js__ = require("../lib/file-stream.js"), $___46__46__47_lib_47_file_45_stream_46_js__ && $___46__46__47_lib_47_file_45_stream_46_js__.__esModule && $___46__46__47_lib_47_file_45_stream_46_js__ || {default: $___46__46__47_lib_47_file_45_stream_46_js__}),
     fileReadStream = $__0.fileReadStream,
     fileWriteStream = $__0.fileWriteStream,
@@ -40,10 +40,10 @@ describe('file stream test', (function() {
     return fileReadStream(testFilePath).then(streamToText).should.eventually.equal(expectedContent);
   }));
   it('file write stream test', (function() {
-    return Promise.all([fileReadStream(testFilePath), fileWriteStream(testWritePath)]).then((function($__4) {
-      var $__5 = $__4,
-          readStream = $__5[0],
-          writeStream = $__5[1];
+    return Promise.all([fileReadStream(testFilePath), fileWriteStream(testWritePath)]).then((function($__5) {
+      var $__6 = $__5,
+          readStream = $__6[0],
+          writeStream = $__6[1];
       return pipeStream(readStream, writeStream).then((function() {
         readFileSync(testWritePath).toString().should.equal(expectedContent);
       }));
