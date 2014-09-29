@@ -130,6 +130,9 @@ var fileStreamable = (function(filePath, fileStats) {
       toFilePath: (function() {
         return resolve(filePath);
       }),
+      toNodeStream: (function() {
+        return resolve(nodeFileReadStream(filePath));
+      }),
       reusable: true,
       offMemory: true,
       contentLength: fileStats.size
@@ -162,6 +165,9 @@ var tempFileStreamable = (function(filePath, fileStats) {
       })),
       toFilePath: wrap((function() {
         return filePath;
+      })),
+      toNodeStream: wrap((function() {
+        return nodeFileReadStream(filePath);
       })),
       reusable: false,
       tempFile: true,
