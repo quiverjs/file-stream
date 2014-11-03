@@ -1,5 +1,11 @@
 "use strict";
 Object.defineProperties(exports, {
+  statFile: {get: function() {
+      return statFile;
+    }},
+  fileExists: {get: function() {
+      return fileExists;
+    }},
   fileReadStream: {get: function() {
       return fileReadStream;
     }},
@@ -30,25 +36,26 @@ Object.defineProperties(exports, {
   __esModule: {value: true}
 });
 var $__fs__,
-    $__quiver_45_stream_45_util__,
     $__quiver_45_error__,
-    $__quiver_45_promise__;
+    $__quiver_45_promise__,
+    $__quiver_45_stream_45_util__;
 var fs = ($__fs__ = require("fs"), $__fs__ && $__fs__.__esModule && $__fs__ || {default: $__fs__}).default;
+var error = ($__quiver_45_error__ = require("quiver-error"), $__quiver_45_error__ && $__quiver_45_error__.__esModule && $__quiver_45_error__ || {default: $__quiver_45_error__}).error;
+var $__2 = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}),
+    async = $__2.async,
+    promisify = $__2.promisify,
+    resolve = $__2.resolve,
+    createPromise = $__2.createPromise;
+var $__3 = ($__quiver_45_stream_45_util__ = require("quiver-stream-util"), $__quiver_45_stream_45_util__ && $__quiver_45_stream_45_util__.__esModule && $__quiver_45_stream_45_util__ || {default: $__quiver_45_stream_45_util__}),
+    nodeToQuiverReadStream = $__3.nodeToQuiverReadStream,
+    nodeToQuiverWriteStream = $__3.nodeToQuiverWriteStream,
+    pipeStream = $__3.pipeStream;
 var $__4 = fs,
     nodeFileReadStream = $__4.createReadStream,
     nodeFileWriteStream = $__4.createWriteStream,
-    statFileAsync = $__4.stat,
-    unlinkFile = $__4.unlink;
-var $__1 = ($__quiver_45_stream_45_util__ = require("quiver-stream-util"), $__quiver_45_stream_45_util__ && $__quiver_45_stream_45_util__.__esModule && $__quiver_45_stream_45_util__ || {default: $__quiver_45_stream_45_util__}),
-    nodeToQuiverReadStream = $__1.nodeToQuiverReadStream,
-    nodeToQuiverWriteStream = $__1.nodeToQuiverWriteStream,
-    pipeStream = $__1.pipeStream;
-var error = ($__quiver_45_error__ = require("quiver-error"), $__quiver_45_error__ && $__quiver_45_error__.__esModule && $__quiver_45_error__ || {default: $__quiver_45_error__}).error;
-var $__3 = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}),
-    async = $__3.async,
-    promisify = $__3.promisify,
-    resolve = $__3.resolve;
-var statFile = promisify(statFileAsync);
+    unlinkFile = $__4.unlink,
+    existsAsync = $__4.exists;
+var statFile = promisify(fs.stat);
 var isFile = (function(fileStats) {
   if (typeof(fileStats.isFile) == 'function')
     return fileStats.isFile();
@@ -64,6 +71,11 @@ var getFileStats = (function(filePath, fileStats) {
     if (!isFile(fileStats))
       return reject(error(404, 'file path is not a regular file'));
     return fileStats;
+  }));
+});
+var fileExists = (function(filePath) {
+  return createPromise((function(resolve, reject) {
+    existsAsync(resolve);
   }));
 });
 var fileReadStream = (function(filePath, fileStats) {

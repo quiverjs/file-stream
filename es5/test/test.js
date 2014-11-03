@@ -1,36 +1,34 @@
 "use strict";
-var $__traceur_64_0_46_0_46_6__,
-    $___46__46__47_lib_47_file_45_stream_46_js__,
-    $__quiver_45_stream_45_util__,
+var $__traceur_64_0_46_0_46_7__,
     $__fs__,
+    $___46__46__47_lib_47_file_45_stream__,
+    $__quiver_45_stream_45_util__,
     $__quiver_45_promise__;
-($__traceur_64_0_46_0_46_6__ = require("traceur"), $__traceur_64_0_46_0_46_6__ && $__traceur_64_0_46_0_46_6__.__esModule && $__traceur_64_0_46_0_46_6__ || {default: $__traceur_64_0_46_0_46_6__});
-var $__0 = ($___46__46__47_lib_47_file_45_stream_46_js__ = require("../lib/file-stream.js"), $___46__46__47_lib_47_file_45_stream_46_js__ && $___46__46__47_lib_47_file_45_stream_46_js__.__esModule && $___46__46__47_lib_47_file_45_stream_46_js__ || {default: $___46__46__47_lib_47_file_45_stream_46_js__}),
-    fileReadStream = $__0.fileReadStream,
-    fileWriteStream = $__0.fileWriteStream,
-    tempFileReadStream = $__0.tempFileReadStream,
-    streamToFile = $__0.streamToFile,
-    byteRangeFileStream = $__0.byteRangeFileStream,
-    fileStreamable = $__0.fileStreamable,
-    tempFileStreamable = $__0.tempFileStreamable,
-    toFileStreamable = $__0.toFileStreamable;
-var $__1 = ($__quiver_45_stream_45_util__ = require("quiver-stream-util"), $__quiver_45_stream_45_util__ && $__quiver_45_stream_45_util__.__esModule && $__quiver_45_stream_45_util__ || {default: $__quiver_45_stream_45_util__}),
-    streamToText = $__1.streamToText,
-    pipeStream = $__1.pipeStream;
+($__traceur_64_0_46_0_46_7__ = require("traceur"), $__traceur_64_0_46_0_46_7__ && $__traceur_64_0_46_0_46_7__.__esModule && $__traceur_64_0_46_0_46_7__ || {default: $__traceur_64_0_46_0_46_7__});
 var fs = ($__fs__ = require("fs"), $__fs__ && $__fs__.__esModule && $__fs__ || {default: $__fs__}).default;
+var $__1 = ($___46__46__47_lib_47_file_45_stream__ = require("../lib/file-stream"), $___46__46__47_lib_47_file_45_stream__ && $___46__46__47_lib_47_file_45_stream__.__esModule && $___46__46__47_lib_47_file_45_stream__ || {default: $___46__46__47_lib_47_file_45_stream__}),
+    fileReadStream = $__1.fileReadStream,
+    fileWriteStream = $__1.fileWriteStream,
+    tempFileReadStream = $__1.tempFileReadStream,
+    streamToFile = $__1.streamToFile,
+    byteRangeFileStream = $__1.byteRangeFileStream,
+    fileStreamable = $__1.fileStreamable,
+    tempFileStreamable = $__1.tempFileStreamable,
+    toFileStreamable = $__1.toFileStreamable;
+var $__2 = ($__quiver_45_stream_45_util__ = require("quiver-stream-util"), $__quiver_45_stream_45_util__ && $__quiver_45_stream_45_util__.__esModule && $__quiver_45_stream_45_util__ || {default: $__quiver_45_stream_45_util__}),
+    streamToText = $__2.streamToText,
+    pipeStream = $__2.pipeStream;
 var $__4 = fs,
     readFile = $__4.readFile,
     readFileSync = $__4.readFileSync;
 var $__3 = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}),
     promisify = $__3.promisify,
-    resolve = $__3.resolve,
-    enableDebug = $__3.enableDebug;
+    resolve = $__3.resolve;
 var chai = require('chai');
 var chaiAsPromised = require('chai-as-promised');
 chai.use(chaiAsPromised);
 var should = chai.should();
 readFile = promisify(readFile);
-enableDebug();
 var testFilePath = 'test/test-file.txt';
 var testWritePath = 'test/test-write.txt';
 var testTempPath = 'test/test-temp.txt';

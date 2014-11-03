@@ -1,22 +1,21 @@
 import 'traceur'
+import fs from 'fs'
 
 import {
   fileReadStream, fileWriteStream, tempFileReadStream,
   streamToFile, byteRangeFileStream,
   fileStreamable, tempFileStreamable, toFileStreamable
-} from '../lib/file-stream.js'
+} from '../lib/file-stream'
 
 import {
   streamToText, pipeStream
 } from 'quiver-stream-util'
 
-import fs from 'fs'
-
 var {
   readFile, readFileSync
 } = fs
 
-import { promisify, resolve, enableDebug } from 'quiver-promise'
+import { promisify, resolve } from 'quiver-promise'
 
 var chai = require('chai')
 var chaiAsPromised = require('chai-as-promised')
@@ -25,7 +24,6 @@ chai.use(chaiAsPromised)
 var should = chai.should()
 
 readFile = promisify(readFile)
-enableDebug()
 
 var testFilePath = 'test/test-file.txt'
 var testWritePath ='test/test-write.txt'
