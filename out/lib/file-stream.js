@@ -50,49 +50,49 @@ var $__3 = ($__quiver_45_stream_45_util__ = require("quiver-stream-util"), $__qu
     nodeToQuiverReadStream = $__3.nodeToQuiverReadStream,
     nodeToQuiverWriteStream = $__3.nodeToQuiverWriteStream,
     pipeStream = $__3.pipeStream;
-var $__4 = fs,
+let $__4 = fs,
     nodeFileReadStream = $__4.createReadStream,
     nodeFileWriteStream = $__4.createWriteStream,
     unlinkFile = $__4.unlink,
     existsAsync = $__4.exists;
-var statFile = promisify(fs.stat);
-var isFile = (function(fileStats) {
+let statFile = promisify(fs.stat);
+let isFile = (function(fileStats) {
   if (typeof(fileStats.isFile) == 'function')
     return fileStats.isFile();
   return fileStats.isFile;
 });
-var isDirectory = (function(fileStats) {
+let isDirectory = (function(fileStats) {
   if (typeof(fileStats.isDirectory) == 'function')
     return fileStats.isDirectory();
   return fileStats.isDirectory;
 });
-var getFileStats = (function(filePath, fileStats) {
+let getFileStats = (function(filePath, fileStats) {
   return (fileStats ? resolve(fileStats) : statFile(filePath)).then((function(fileStats) {
     if (!isFile(fileStats))
       return reject(error(404, 'file path is not a regular file'));
     return fileStats;
   }));
 });
-var fileExists = (function(filePath) {
+let fileExists = (function(filePath) {
   return createPromise((function(resolve, reject) {
     existsAsync(resolve);
   }));
 });
-var fileReadStream = (function(filePath, fileStats) {
+let fileReadStream = (function(filePath, fileStats) {
   return getFileStats(filePath, fileStats).then((function() {
     return nodeToQuiverReadStream(nodeFileReadStream(filePath));
   }));
 });
-var fileWriteStream = (function(filePath) {
+let fileWriteStream = (function(filePath) {
   return resolve(nodeToQuiverWriteStream(nodeFileWriteStream(filePath)));
 });
-var tempFileReadStream = (function(filePath, fileStats) {
+let tempFileReadStream = (function(filePath, fileStats) {
   return getFileStats(filePath, fileStats).then((function() {
-    var nodeStream = nodeFileReadStream(filePath);
-    var deleted = false;
-    var deleteFile = (function() {
+    let nodeStream = nodeFileReadStream(filePath);
+    let deleted = false;
+    let deleteFile = (function() {
       if (deleted)
-        return;
+        return ;
       deleted = true;
       unlinkFile(filePath, (function(err) {}));
     });
@@ -101,21 +101,21 @@ var tempFileReadStream = (function(filePath, fileStats) {
     return nodeToQuiverReadStream(nodeStream);
   }));
 });
-var streamToFile = (function(readStream, filePath) {
+let streamToFile = (function(readStream, filePath) {
   return fileWriteStream(filePath).then((function(writeStream) {
     return pipeStream(readStream, writeStream);
   }));
 });
-var byteRangeFileStream = (function(filePath) {
+let byteRangeFileStream = (function(filePath) {
   var $__6,
       $__7;
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
-  var $__5 = options,
+  let $__5 = options,
       fileStats = $__5.fileStats,
       start = ($__6 = $__5.start) === void 0 ? 0 : $__6,
       end = ($__7 = $__5.end) === void 0 ? -1 : $__7;
   return getFileStats(filePath, fileStats).then((function(fileStats) {
-    var fileSize = fileStats.size;
+    let fileSize = fileStats.size;
     if (end == -1)
       end = fileSize;
     if (fileSize < end)
@@ -126,7 +126,7 @@ var byteRangeFileStream = (function(filePath) {
     }));
   }));
 });
-var fileStreamable = (function(filePath, fileStats) {
+let fileStreamable = (function(filePath, fileStats) {
   return getFileStats(filePath, fileStats).then((function(fileStats) {
     return ({
       toStream: (function() {
@@ -151,12 +151,12 @@ var fileStreamable = (function(filePath, fileStats) {
     });
   }));
 });
-var tempFileStreamable = (function(filePath, fileStats) {
+let tempFileStreamable = (function(filePath, fileStats) {
   return getFileStats(filePath, fileStats).then((function(fileStats) {
     if (isDirectory(fileStats))
       return reject(error(404, 'path is directory'));
-    var opened = false;
-    var wrap = (function(fn) {
+    let opened = false;
+    let wrap = (function(fn) {
       return (function() {
         if (opened)
           return reject(error(500, 'streamable can only be opened once'));
@@ -188,87 +188,29 @@ var tempFileStreamable = (function(filePath, fileStats) {
     };
   }));
 });
-var streamableToFile = async($traceurRuntime.initGeneratorFunction(function $__8(streamable, getTempPath) {
-  var filePath,
-      isTemp,
-      $__5,
-      readStream,
-      tempPath,
-      $__9,
-      $__10,
-      $__11,
-      $__12,
-      $__13,
-      $__14,
-      $__15,
-      $__16,
-      $__17;
-  return $traceurRuntime.createGeneratorInstance(function($ctx) {
-    while (true)
-      switch ($ctx.state) {
-        case 0:
-          $ctx.state = (streamable.toFilePath) ? 1 : 6;
-          break;
-        case 1:
-          $ctx.state = 2;
-          return streamable.toFilePath();
-        case 2:
-          filePath = $ctx.sent;
-          $ctx.state = 4;
-          break;
-        case 4:
-          isTemp = streamable.tempFile || false;
-          $ctx.state = 8;
-          break;
-        case 8:
-          $ctx.returnValue = [filePath, isTemp];
-          $ctx.state = -2;
-          break;
-        case 6:
-          $__9 = Promise.all;
-          $__10 = streamable.toStream;
-          $__11 = $__10.call(streamable);
-          $__12 = getTempPath();
-          $__13 = [$__11, $__12];
-          $__14 = $__9.call(Promise, $__13);
-          $ctx.state = 15;
-          break;
-        case 15:
-          $ctx.state = 11;
-          return $__14;
-        case 11:
-          $__15 = $ctx.sent;
-          $ctx.state = 13;
-          break;
-        case 13:
-          $__5 = $__15;
-          $__16 = $__5[0];
-          readStream = $__16;
-          $__17 = $__5[1];
-          tempPath = $__17;
-          $ctx.state = 17;
-          break;
-        case 17:
-          $ctx.state = 19;
-          return streamToFile(readStream, tempPath);
-        case 19:
-          $ctx.maybeThrow();
-          $ctx.state = 21;
-          break;
-        case 21:
-          $ctx.returnValue = [tempPath, true];
-          $ctx.state = -2;
-          break;
-        default:
-          return $ctx.end();
-      }
-  }, $__8, this);
-}));
-var toFileStreamable = (function(streamable, getTempPath) {
+let streamableToFile = async(function*(streamable, getTempPath) {
+  var $__6,
+      $__7;
+  if (streamable.toFilePath) {
+    let filePath = yield streamable.toFilePath();
+    let isTemp = streamable.tempFile || false;
+    return [filePath, isTemp];
+  }
+  let $__5 = yield Promise.all([streamable.toStream(), getTempPath()]),
+      readStream = ($__6 = $__5[$traceurRuntime.toProperty(Symbol.iterator)](), ($__7 = $__6.next()).done ? void 0 : $__7.value),
+      tempPath = ($__7 = $__6.next()).done ? void 0 : $__7.value;
+  yield streamToFile(readStream, tempPath);
+  return [tempPath, true];
+});
+let toFileStreamable = (function(streamable, getTempPath) {
   if (streamable.toFilePath)
     return resolve(streamable);
   return streamableToFile(streamable, getTempPath).then((function($__5) {
-    var filePath = $__5[0];
+    var $__7,
+        $__8,
+        $__9,
+        $__10;
+    var filePath = ($__9 = $__5[$traceurRuntime.toProperty(Symbol.iterator)](), ($__10 = $__9.next()).done ? void 0 : $__10.value);
     return tempFileStreamable(filePath);
   }));
 });

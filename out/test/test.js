@@ -1,10 +1,10 @@
 "use strict";
-var $__traceur_64_0_46_0_46_7__,
+var $__traceur_64_0_46_0_46_8__,
     $__fs__,
     $___46__46__47_lib_47_file_45_stream__,
     $__quiver_45_stream_45_util__,
     $__quiver_45_promise__;
-($__traceur_64_0_46_0_46_7__ = require("traceur"), $__traceur_64_0_46_0_46_7__ && $__traceur_64_0_46_0_46_7__.__esModule && $__traceur_64_0_46_0_46_7__ || {default: $__traceur_64_0_46_0_46_7__});
+($__traceur_64_0_46_0_46_8__ = require("traceur"), $__traceur_64_0_46_0_46_8__ && $__traceur_64_0_46_0_46_8__.__esModule && $__traceur_64_0_46_0_46_8__ || {default: $__traceur_64_0_46_0_46_8__});
 var fs = ($__fs__ = require("fs"), $__fs__ && $__fs__.__esModule && $__fs__ || {default: $__fs__}).default;
 var $__1 = ($___46__46__47_lib_47_file_45_stream__ = require("../lib/file-stream"), $___46__46__47_lib_47_file_45_stream__ && $___46__46__47_lib_47_file_45_stream__.__esModule && $___46__46__47_lib_47_file_45_stream__ || {default: $___46__46__47_lib_47_file_45_stream__}),
     fileReadStream = $__1.fileReadStream,
@@ -18,39 +18,41 @@ var $__1 = ($___46__46__47_lib_47_file_45_stream__ = require("../lib/file-stream
 var $__2 = ($__quiver_45_stream_45_util__ = require("quiver-stream-util"), $__quiver_45_stream_45_util__ && $__quiver_45_stream_45_util__.__esModule && $__quiver_45_stream_45_util__ || {default: $__quiver_45_stream_45_util__}),
     streamToText = $__2.streamToText,
     pipeStream = $__2.pipeStream;
-var $__4 = fs,
+let $__4 = fs,
     readFile = $__4.readFile,
     readFileSync = $__4.readFileSync;
 var $__3 = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}),
     promisify = $__3.promisify,
     resolve = $__3.resolve;
-var chai = require('chai');
-var chaiAsPromised = require('chai-as-promised');
+let chai = require('chai');
+let chaiAsPromised = require('chai-as-promised');
 chai.use(chaiAsPromised);
-var should = chai.should();
+let should = chai.should();
 readFile = promisify(readFile);
-var testFilePath = 'test/test-file.txt';
-var testWritePath = 'test/test-write.txt';
-var testTempPath = 'test/test-temp.txt';
-var expectedContent = readFileSync(testFilePath).toString();
+let testFilePath = 'test/test-file.txt';
+let testWritePath = 'test/test-write.txt';
+let testTempPath = 'test/test-temp.txt';
+let expectedContent = readFileSync(testFilePath).toString();
 describe('file stream test', (function() {
   it('file read stream test', (function() {
     return fileReadStream(testFilePath).then(streamToText).should.eventually.equal(expectedContent);
   }));
   it('file write stream test', (function() {
     return Promise.all([fileReadStream(testFilePath), fileWriteStream(testWritePath)]).then((function($__5) {
+      var $__7,
+          $__8;
       var $__6 = $__5,
-          readStream = $__6[0],
-          writeStream = $__6[1];
+          readStream = ($__7 = $__6[$traceurRuntime.toProperty(Symbol.iterator)](), ($__8 = $__7.next()).done ? void 0 : $__8.value),
+          writeStream = ($__8 = $__7.next()).done ? void 0 : $__8.value;
       return pipeStream(readStream, writeStream).then((function() {
         readFileSync(testWritePath).toString().should.equal(expectedContent);
       }));
     }));
   }));
   it('file byte range stream test', (function() {
-    var start = 128;
-    var end = 512;
-    var expectedSlice = expectedContent.slice(start, end);
+    let start = 128;
+    let end = 512;
+    let expectedSlice = expectedContent.slice(start, end);
     return byteRangeFileStream(testFilePath, {
       start: start,
       end: end
@@ -67,11 +69,11 @@ describe('file stream test', (function() {
     }));
   }));
   it('temp file streamable test', (function() {
-    var getTempPath = (function() {
+    let getTempPath = (function() {
       return resolve(testTempPath);
     });
     return fileReadStream(testFilePath).then((function(readStream) {
-      var streamable = {toStream: (function() {
+      let streamable = {toStream: (function() {
           return resolve(readStream);
         })};
       return toFileStreamable(streamable, getTempPath).then((function(streamable) {

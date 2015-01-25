@@ -11,25 +11,25 @@ import {
   streamToText, pipeStream
 } from 'quiver-stream-util'
 
-var {
+let {
   readFile, readFileSync
 } = fs
 
 import { promisify, resolve } from 'quiver-promise'
 
-var chai = require('chai')
-var chaiAsPromised = require('chai-as-promised')
+let chai = require('chai')
+let chaiAsPromised = require('chai-as-promised')
 
 chai.use(chaiAsPromised)
-var should = chai.should()
+let should = chai.should()
 
 readFile = promisify(readFile)
 
-var testFilePath = 'test/test-file.txt'
-var testWritePath ='test/test-write.txt'
-var testTempPath = 'test/test-temp.txt'
+let testFilePath = 'test/test-file.txt'
+let testWritePath ='test/test-write.txt'
+let testTempPath = 'test/test-temp.txt'
 
-var expectedContent = readFileSync(testFilePath).toString()
+let expectedContent = readFileSync(testFilePath).toString()
 
 describe('file stream test', () => {
   it('file read stream test', () =>
@@ -47,10 +47,10 @@ describe('file stream test', () => {
       })))
 
   it('file byte range stream test', () => {
-    var start = 128
-    var end = 512
+    let start = 128
+    let end = 512
 
-    var expectedSlice = expectedContent.slice(start, end)
+    let expectedSlice = expectedContent.slice(start, end)
     
     return byteRangeFileStream(testFilePath, { start, end })
       .then(streamToText).should.eventually.equal(expectedSlice)
@@ -69,10 +69,10 @@ describe('file stream test', () => {
     }))
 
   it('temp file streamable test', () => {
-    var getTempPath = () => resolve(testTempPath)
+    let getTempPath = () => resolve(testTempPath)
 
     return fileReadStream(testFilePath).then(readStream => {
-      var streamable = {
+      let streamable = {
         toStream: () => resolve(readStream)
       }
 
