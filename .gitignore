@@ -1,3 +1,4 @@
 node_modules/
-test/test-write.txt
-test/test-temp.txt
+out/
+fixture/test-write.txt
+fixture/test-temp.txt

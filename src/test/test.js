@@ -25,9 +25,9 @@ let should = chai.should()
 
 readFile = promisify(readFile)
 
-let testFilePath = 'test/test-file.txt'
-let testWritePath ='test/test-write.txt'
-let testTempPath = 'test/test-temp.txt'
+const testFilePath = 'fixture/test-file.txt'
+const testWritePath ='fixture/test-write.txt'
+const testTempPath = 'fixture/test-temp.txt'
 
 let expectedContent = readFileSync(testFilePath).toString()
 
