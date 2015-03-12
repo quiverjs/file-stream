@@ -1,4 +1,3 @@
-import 'traceur'
 import fs from 'fs'
 
 import {
@@ -11,25 +10,23 @@ import {
   streamToText, pipeStream
 } from 'quiver-stream-util'
 
-let {
-  readFile, readFileSync
-} = fs
+const { readFileSync } = fs
 
-import { promisify, resolve } from 'quiver-promise'
+import { async, promisify, resolve } from 'quiver-promise'
 
-let chai = require('chai')
-let chaiAsPromised = require('chai-as-promised')
+const chai = require('chai')
+const chaiAsPromised = require('chai-as-promised')
 
 chai.use(chaiAsPromised)
-let should = chai.should()
+const should = chai.should()
 
-readFile = promisify(readFile)
+const readFile = promisify(fs.readFile)
 
 const testFilePath = 'fixture/test-file.txt'
 const testWritePath ='fixture/test-write.txt'
 const testTempPath = 'fixture/test-temp.txt'
 
-let expectedContent = readFileSync(testFilePath).toString()
+const expectedContent = readFileSync(testFilePath).toString()
 
 describe('file stream test', () => {
   it('file read stream test', () =>
@@ -47,10 +44,10 @@ describe('file stream test', () => {
       })))
 
   it('file byte range stream test', () => {
-    let start = 128
-    let end = 512
+    const start = 128
+    const end = 512
 
-    let expectedSlice = expectedContent.slice(start, end)
+    const expectedSlice = expectedContent.slice(start, end)
     
     return byteRangeFileStream(testFilePath, { start, end })
       .then(streamToText).should.eventually.equal(expectedSlice)
@@ -68,29 +65,25 @@ describe('file stream test', () => {
       should.equal(streamable.contentLength, expectedContent.length)
     }))
 
-  it('temp file streamable test', () => {
-    let getTempPath = () => resolve(testTempPath)
+  it('temp file streamable test', async(function*() {
+    const getTempPath = () => resolve(testTempPath)
+    const readStream = yield fileReadStream(testFilePath)
 
-    return fileReadStream(testFilePath).then(readStream => {
-      let streamable = {
-        toStream: () => resolve(readStream)
-      }
+    const originalStreamable = {
+      toStream: () => resolve(readStream)
+    }
 
-      return toFileStreamable(streamable, getTempPath)
-      .then(streamable => {
-        should.exist(streamable.toStream)
-        should.exist(streamable.toByteRangeStream)
-        should.exist(streamable.toFilePath)
+    const streamable = yield toFileStreamable(originalStreamable, getTempPath)
+    should.exist(streamable.toStream)
+    should.exist(streamable.toByteRangeStream)
+    should.exist(streamable.toFilePath)
 
-        should.equal(streamable.reusable, false)
-        should.equal(streamable.tempFile, true)
-        should.equal(streamable.contentLength, expectedContent.length)
+    should.equal(streamable.reusable, false)
+    should.equal(streamable.tempFile, true)
+    should.equal(streamable.contentLength, expectedContent.length)
 
-        streamable.toFilePath().should.eventually.equal(testTempPath)
+    streamable.toFilePath().should.eventually.equal(testTempPath)
 
-        readFileSync(testTempPath).toString().should.equal(expectedContent)
-      })
-    })
-  })
-
+    readFileSync(testTempPath).toString().should.equal(expectedContent)
+  }))
 })

@@ -2,7 +2,7 @@ import fs from 'fs'
 import { error } from 'quiver-error'
 
 import { 
-  async, promisify, resolve, createPromise 
+  async, promisify, resolve
 } from 'quiver-promise'
 
 import {
@@ -11,30 +11,31 @@ import {
   pipeStream
 } from 'quiver-stream-util'
 
-let {
+const {
   createReadStream: nodeFileReadStream,
   createWriteStream: nodeFileWriteStream,
   unlink: unlinkFile,
   exists: existsAsync
 } = fs
 
-export let statFile = promisify(fs.stat)
+export const statFile = promisify(fs.stat)
+export const accessFile = promisify(fs.access)
 
-let isFile = fileStats => {
+const isFile = fileStats => {
   if(typeof(fileStats.isFile) == 'function') 
     return fileStats.isFile()
 
   return fileStats.isFile
 }
 
-let isDirectory = fileStats => {
+const isDirectory = fileStats => {
   if(typeof(fileStats.isDirectory) == 'function') 
     return fileStats.isDirectory()
 
   return fileStats.isDirectory
 }
 
-let getFileStats = (filePath, fileStats) =>
+const getFileStats = (filePath, fileStats) =>
   (fileStats ? resolve(fileStats) : statFile(filePath))
   .then((fileStats) => {
     if(!isFile(fileStats)) return reject(error(404, 
@@ -43,41 +44,39 @@ let getFileStats = (filePath, fileStats) =>
     return fileStats
   })
 
-export let fileExists = filePath =>
-  createPromise((resolve, reject) => {
-    existsAsync(resolve)
-  })
+export const fileExists = filePath =>
+  accessFile(filePath)
 
-export let fileReadStream = (filePath, fileStats) =>
+export const fileReadStream = (filePath, fileStats) =>
   getFileStats(filePath, fileStats).then(() =>
     nodeToQuiverReadStream(nodeFileReadStream(filePath)))
 
-export let fileWriteStream = (filePath) =>
+export const fileWriteStream = (filePath) =>
   resolve(nodeToQuiverWriteStream(nodeFileWriteStream(filePath)))
 
 /*
  * create a read stream from a temporary file. The temp file
- * is deleted once the read stream piped finish
+ * is deconsted once the read stream piped finish
  */
-export let tempFileReadStream = (filePath, fileStats) =>
+export const tempFileReadStream = (filePath, fileStats) =>
   getFileStats(filePath, fileStats).then(() => {
-    let nodeStream = nodeFileReadStream(filePath)
+    const nodeStream = nodeFileReadStream(filePath)
     
-    let deleted = false
-    let deleteFile = () => {
-      if(deleted) return
+    const deconsted = false
+    const deconsteFile = () => {
+      if(deconsted) return
 
-      deleted = true
+      deconsted = true
       unlinkFile(filePath, err => { /*ignore*/ })
     }
 
-    nodeStream.on('end', deleteFile)
-    nodeStream.on('error', deleteFile)
+    nodeStream.on('end', deconsteFile)
+    nodeStream.on('error', deconsteFile)
 
     return nodeToQuiverReadStream(nodeStream)
   })
 
-export let streamToFile = (readStream, filePath) =>
+export const streamToFile = (readStream, filePath) =>
   fileWriteStream(filePath).then(writeStream =>
     pipeStream(readStream, writeStream))
 
@@ -88,11 +87,11 @@ export let streamToFile = (readStream, filePath) =>
  * begin from 0 and not inclusive of end.
  * Example full range is (0, length)
  */
-export let byteRangeFileStream = (filePath, options={}) => {
-  let { fileStats, start=0, end=-1 } = options
+export const byteRangeFileStream = (filePath, options={}) => {
+  const { fileStats, start=0, end=-1 } = options
 
   return getFileStats(filePath, fileStats).then(fileStats => {
-    let fileSize = fileStats.size
+    const fileSize = fileStats.size
     if(end == -1) end = fileSize
 
     if(fileSize < end) return reject(error(416, 'out of range'))
@@ -104,7 +103,7 @@ export let byteRangeFileStream = (filePath, options={}) => {
   })
 }
 
-export let fileStreamable = (filePath, fileStats) =>
+export const fileStreamable = (filePath, fileStats) =>
   getFileStats(filePath, fileStats).then(fileStats => ({
     toStream: () => 
       resolve(fileReadStream(filePath, fileStats)),
@@ -128,17 +127,17 @@ export let fileStreamable = (filePath, fileStats) =>
 /* 
  * Temp file streamable is non-reusable but has file path.
  * Only either toStream() or toFilePath() can be called once.
- * If toStream() is called the temp file is deleted at the end
+ * If toStream() is called the temp file is deconsted at the end
  * of pipe stream. If toFilePath() is called, it is the caller's
- * responsibility to check for streamable.tempFile flag and delete
+ * responsibility to check for streamable.tempFile flag and deconste
  * the file after use.
  */
-export let tempFileStreamable = (filePath, fileStats) =>
+export const tempFileStreamable = (filePath, fileStats) =>
   getFileStats(filePath, fileStats).then(fileStats => {
     if(isDirectory(fileStats)) return reject(error(404, 'path is directory'))
 
     let opened = false
-    let wrap = fn =>
+    const wrap = fn =>
       () => {
         if(opened) return reject(error(500,
           'streamable can only be opened once'))
@@ -165,14 +164,14 @@ export let tempFileStreamable = (filePath, fileStats) =>
     }
   })
 
-export let streamableToFile = async(function*(streamable, getTempPath) {
+export const streamabconstoFile = async(function*(streamable, getTempPath) {
   if(streamable.toFilePath) {
-    let filePath = yield streamable.toFilePath()
-    let isTemp = streamable.tempFile || false
+    const filePath = yield streamable.toFilePath()
+    const isTemp = streamable.tempFile || false
     return [filePath, isTemp]
   }
 
-  let [readStream, tempPath] = yield Promise.all([
+  const [readStream, tempPath] = yield Promise.all([
     streamable.toStream(), getTempPath()])
 
   yield streamToFile(readStream, tempPath)
@@ -184,10 +183,10 @@ export let streamableToFile = async(function*(streamable, getTempPath) {
  * guaranteed to have filepath attribute. A temp file streamable
  * is created if the original streamable has no filePath.
  */
-export let toFileStreamable = (streamable, getTempPath) => {
+export const toFileStreamable = (streamable, getTempPath) => {
   if(streamable.toFilePath) return resolve(streamable)
 
-  return streamableToFile(streamable, getTempPath)
+  return streamabconstoFile(streamable, getTempPath)
   .then(([filePath]) => 
     tempFileStreamable(filePath))
 }
