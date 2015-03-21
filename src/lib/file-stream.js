@@ -56,22 +56,22 @@ export const fileWriteStream = (filePath) =>
 
 /*
  * create a read stream from a temporary file. The temp file
- * is deconsted once the read stream piped finish
+ * is deleted once the read stream piped finish
  */
 export const tempFileReadStream = (filePath, fileStats) =>
   getFileStats(filePath, fileStats).then(() => {
     const nodeStream = nodeFileReadStream(filePath)
     
-    const deconsted = false
-    const deconsteFile = () => {
-      if(deconsted) return
+    let deleted = false
+    const deleteFile = () => {
+      if(deleted) return
 
-      deconsted = true
+      deleted = true
       unlinkFile(filePath, err => { /*ignore*/ })
     }
 
-    nodeStream.on('end', deconsteFile)
-    nodeStream.on('error', deconsteFile)
+    nodeStream.on('end', deleteFile)
+    nodeStream.on('error', deleteFile)
 
     return nodeToQuiverReadStream(nodeStream)
   })
@@ -127,9 +127,9 @@ export const fileStreamable = (filePath, fileStats) =>
 /* 
  * Temp file streamable is non-reusable but has file path.
  * Only either toStream() or toFilePath() can be called once.
- * If toStream() is called the temp file is deconsted at the end
+ * If toStream() is called the temp file is deleted at the end
  * of pipe stream. If toFilePath() is called, it is the caller's
- * responsibility to check for streamable.tempFile flag and deconste
+ * responsibility to check for streamable.tempFile flag and delete
  * the file after use.
  */
 export const tempFileStreamable = (filePath, fileStats) =>
