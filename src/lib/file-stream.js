@@ -2,7 +2,7 @@ import fs from 'fs'
 import { error } from 'quiver-error'
 
 import { 
-  async, promisify, resolve
+  promisify, resolve
 } from 'quiver-promise'
 
 import {
@@ -164,19 +164,19 @@ export const tempFileStreamable = (filePath, fileStats) =>
     }
   })
 
-export const streamabconstoFile = async(function*(streamable, getTempPath) {
+export const streamabconstoFile = async function(streamable, getTempPath) {
   if(streamable.toFilePath) {
-    const filePath = yield streamable.toFilePath()
+    const filePath = await streamable.toFilePath()
     const isTemp = streamable.tempFile || false
     return [filePath, isTemp]
   }
 
-  const [readStream, tempPath] = yield Promise.all([
+  const [readStream, tempPath] = await Promise.all([
     streamable.toStream(), getTempPath()])
 
-  yield streamToFile(readStream, tempPath)
+  await streamToFile(readStream, tempPath)
   return [tempPath, true]
-})
+}
 
 /*
  * Obtain either original or converted streamable that

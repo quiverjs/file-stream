@@ -12,7 +12,7 @@ import {
 
 const { readFileSync } = fs
 
-import { async, promisify, resolve } from 'quiver-promise'
+import { promisify, resolve } from 'quiver-promise'
 
 const chai = require('chai')
 const chaiAsPromised = require('chai-as-promised')
@@ -65,15 +65,15 @@ describe('file stream test', () => {
       should.equal(streamable.contentLength, expectedContent.length)
     }))
 
-  it('temp file streamable test', async(function*() {
+  it('temp file streamable test', async function() {
     const getTempPath = () => resolve(testTempPath)
-    const readStream = yield fileReadStream(testFilePath)
+    const readStream = await fileReadStream(testFilePath)
 
     const originalStreamable = {
       toStream: () => resolve(readStream)
     }
 
-    const streamable = yield toFileStreamable(originalStreamable, getTempPath)
+    const streamable = await toFileStreamable(originalStreamable, getTempPath)
     should.exist(streamable.toStream)
     should.exist(streamable.toByteRangeStream)
     should.exist(streamable.toFilePath)
@@ -85,5 +85,5 @@ describe('file stream test', () => {
     streamable.toFilePath().should.eventually.equal(testTempPath)
 
     readFileSync(testTempPath).toString().should.equal(expectedContent)
-  }))
+  })
 })
