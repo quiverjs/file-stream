@@ -2,6 +2,6 @@ build: src
 	babel src --out-dir out
 
 test: build
-	node out/test
+	node test
 
 .PHONY: build test

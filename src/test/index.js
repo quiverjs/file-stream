@@ -1,4 +1,5 @@
 import test from 'tape'
+import { join as joinPath } from 'path'
 
 import { readFileSync, readFile as readFileAsync } from 'fs'
 
@@ -13,9 +14,9 @@ import {
 
 const readFile = promisify(readFileAsync)
 
-const testFilePath = 'fixture/test-file.txt'
-const testWritePath ='fixture/test-write.txt'
-const testTempPath = 'fixture/test-temp.txt'
+const testFilePath = joinPath(__dirname, '../../fixture/test-file.txt')
+const testWritePath = joinPath(__dirname, '../../fixture/test-write.txt')
+const testTempPath = joinPath(__dirname, '../../fixture/test-temp.txt')
 
 const expectedContent = readFileSync(testFilePath).toString()
 
