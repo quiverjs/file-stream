@@ -1,6 +1,8 @@
 {
   "stage": 1,
   "optional": [
+    "runtime",
+    "es6.properties.computed",
     "es7.functionBind",
     "es7.asyncFunctions",
     "asyncToGenerator"
@@ -11,6 +13,6 @@
     "es6.forOf",
     "es6.tailCall",
     "es6.classes",
-    "regenerator" 
+    "regenerator"
   ]
 }

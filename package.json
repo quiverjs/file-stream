@@ -6,35 +6,30 @@
   },
   "name": "quiver-file-stream",
   "desription": "Create Quiver read/write streams from the filesystem",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "homepage": "https://github.com/quiverjs/quiver-file-stream",
   "repository": {
     "url": "git@github.com:quiverjs/quiver-file-stream.git"
   },
   "dependencies": {
-    "quiver-error": "~1.2.1",
-    "quiver-promise": "~1.2.1",
-    "quiver-stream-util": "~1.4.3"
+    "babel-runtime": "^5.8.25",
+    "quiver-util": "~1.1.3",
+    "quiver-stream-util": "~1.4.4"
   },
   "devDependencies": {
-    "chai": "^2.3.0",
-    "mocha": "^2.2.4",
-    "babel": "^5.4.7",
-    "chai-as-promised": "^4.3.0"
+    "tape": "^4.2.0",
+    "babel": "^5.8.23"
   },
   "bugs": {
     "url": "https://github.com/quiverjs/quiver-file-stream/issues"
   },
-  "licenses": {
-    "type": "MIT",
-    "url": "https://raw.github.com/quiverjs/license/master/LICENSE"
-  },
+  "license": "ISC",
   "main": "./index.js",
   "scripts": {
     "test": "make test",
     "prepublish": "make build"
   },
   "engines": {
-    "iojs": "^2.2.0"
+    "node": "^4.1.2"
   }
 }
