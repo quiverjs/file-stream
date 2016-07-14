@@ -1,3 +1,4 @@
+import mime from 'mime'
 import { error } from 'quiver-util/error'
 
 import {
@@ -107,6 +108,7 @@ export const byteRangeFileStream = async function(filePath, options={}) {
 
 export const fileStreamable = async function(filePath, $fileStats) {
   const fileStats = await getFileStats(filePath, $fileStats)
+  const contentType = mime.lookup(filePath)
 
   return {
     toStream: () =>
@@ -124,7 +126,8 @@ export const fileStreamable = async function(filePath, $fileStats) {
 
     reusable: true,
     offMemory: true,
-    contentLength: fileStats.size
+    contentLength: fileStats.size,
+    contentType: mime.lookup(filePath)
   }
 }
 
@@ -155,6 +158,7 @@ export const tempFileStreamable = async function(filePath, $fileStats) {
     tempFile: true,
     offMemory: true,
     contentLength: fileStats.size,
+    contentType: mime.lookup(filePath),
 
     async toStream() {
       openStream()
