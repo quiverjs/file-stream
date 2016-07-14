@@ -62,6 +62,7 @@ test('file stream test', assert => {
 
     assert.equal(streamable.reusable, true)
     assert.equal(streamable.contentLength, expectedContent.length)
+    assert.equal(streamable.contentType, 'text/plain')
 
     assert.end()
   })
@@ -82,6 +83,7 @@ test('file stream test', assert => {
     assert.equal(streamable.reusable, false)
     assert.equal(streamable.tempFile, true)
     assert.equal(streamable.contentLength, expectedContent.length)
+    assert.equal(streamable.contentType, 'text/plain')
 
     assert.equal(await streamable.toFilePath(), testTempPath)
     const buffer = await readFile(testTempPath)
